@@ -105,8 +105,10 @@ extern int sys_write(void);
 extern int sys_uptime(void);
 #ifdef PDX_XV6
 extern int sys_halt(void);
-extern int sys_date(void);
 #endif // PDX_XV6
+#ifdef CS333_P1
+extern int sys_date(void);
+#endif // CS333_P1
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -135,7 +137,7 @@ static int (*syscalls[])(void) = {
 #endif // PDX_XV6
 #ifdef CS333_P1
 [SYS_date]    sys_date,
-#endif // PDX_XV6
+#endif // CS333_P1
 };
 
 #ifdef PRINT_SYSCALLS
@@ -176,9 +178,11 @@ syscall(void)
   num = curproc->tf->eax;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
     curproc->tf->eax = syscalls[num]();
-    #ifdef PRINT_SYSCALLS
-      cprintf("%s -> %d\n",
-            syscallnames[num], curproc->tf->eax);
+    #ifdef CS333_P1
+      #ifdef PRINT_SYSCALLS
+        cprintf("%s -> %d\n",
+              syscallnames[num], curproc->tf->eax);
+      #endif
     #endif
   } else {
     cprintf("%d %s: unknown sys call %d\n",

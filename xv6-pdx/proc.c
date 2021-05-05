@@ -149,8 +149,9 @@ allocproc(void)
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
 
-  p->start_ticks = ticks;
-
+  #ifdef CS333_P1
+    p->start_ticks = ticks;
+  #endif
   return p;
 }
 
